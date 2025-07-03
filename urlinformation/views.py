@@ -20,18 +20,18 @@ class URLInformationViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs) -> Response:
         url = request.data.get(URL)
-
         if not url:
             return Response(URL_REQUIRED_MESSAGE, status.HTTP_400_BAD_REQUEST)
-        if URLInformationModel.objects.filter(pk=url).exists():
-            return Response(URL_EXIST_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
-
-        if not validators.url(url):
-            return Response(INVALID_URL_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
-        if not is_safe_url(url):
-            return Response(URL_IS_NOT_SAFE_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
 
         normalized_url = normalize_url(url)
+        if URLInformationModel.objects.filter(pk=normalized_url).exists():
+            return Response(URL_EXIST_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
+
+        if not validators.url(normalized_url):
+            return Response(INVALID_URL_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
+        if not is_safe_url(normalized_url):
+            return Response(URL_IS_NOT_SAFE_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
+
         url_information = extract_url_information(normalized_url)
         url_information_object = URLInformationModel.objects.create(url=normalized_url, **url_information)
 

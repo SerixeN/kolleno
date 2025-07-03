@@ -45,7 +45,7 @@ def test_create_missed_url(monkeypatch):
 
 
 def test_create_duplicate_url():
-    url = 'https://duplicate.com/'
+    url = 'https://duplicate.com'
     URLInformationModel.objects.create(url=url, domain_name='duplicate.com', protocol='https', stylesheets=0, title='')
 
     response = client.post(TEST_URL, data={'url': url}, format='json')
