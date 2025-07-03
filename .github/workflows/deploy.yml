@@ -1,13 +1,13 @@
 name: Deploy via SSH
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Lint", "Django Tests"]
+    types:
+      - completed
 
 jobs:
   deploy:
-    needs: [flake8, test]
     runs-on: ubuntu-latest
 
     steps:
