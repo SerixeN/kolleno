@@ -23,5 +23,4 @@ jobs:
 
       - name: SSH and deploy with docker-compose
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "cd /kolleno 
-          && docker compose down && VIRUS_TOTAL_API_KEY="${{ secrets.VIRUS_TOTAL_API_KEY }}" docker compose up -d --build"
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "cd /kolleno && docker compose down && VIRUS_TOTAL_API_KEY="${{ secrets.VIRUS_TOTAL_API_KEY }}" docker compose up -d --build"
