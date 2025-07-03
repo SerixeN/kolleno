@@ -1,5 +1,5 @@
 from unittest.mock import patch, MagicMock
-from urlinformation.utils import extract_url_information, is_safe_url
+from urlinformation.utils import extract_url_information, is_safe_url, normalize_url
 
 
 def test_extract_url_information():
@@ -91,3 +91,14 @@ def test_is_safe_url_api_failure():
 
     with patch('urlinformation.utils.requests.post', return_value=post_response):
         assert is_safe_url(url) is False
+
+
+def test_normalized_url_with_backslash():
+    url = 'https://test.com/'
+    expected = 'https://test.com'
+    assert normalize_url(url) == expected
+
+
+def test_normalized_url_without_backslash():
+    url = 'https://test.com'
+    assert normalize_url(url) == url

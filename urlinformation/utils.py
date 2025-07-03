@@ -53,3 +53,14 @@ def extract_url_information(url: AnyStr) -> Dict[AnyStr, Any]:
         'images': images,
         'stylesheets': stylesheets,
     }
+
+
+def normalize_url(url: AnyStr) -> AnyStr:
+    """
+    Function to normalize url - remove ending backslash
+    :param url: url string
+    :return: normalized url
+    """
+    if url.endswith('/'):
+        return url[:-1]
+    return url

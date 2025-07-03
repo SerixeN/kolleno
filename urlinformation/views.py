@@ -11,7 +11,7 @@ from .constants import (
 )
 from .models import URLInformationModel
 from .serializers import URLInformationSerializer
-from .utils import is_safe_url, extract_url_information
+from .utils import is_safe_url, extract_url_information, normalize_url
 
 
 class URLInformationViewSet(viewsets.ModelViewSet):
@@ -31,14 +31,16 @@ class URLInformationViewSet(viewsets.ModelViewSet):
         if not is_safe_url(url):
             return Response(URL_IS_NOT_SAFE_MESSAGE, status=status.HTTP_400_BAD_REQUEST)
 
-        url_information = extract_url_information(url)
-        url_information_object = URLInformationModel.objects.create(url=url, **url_information)
+        normalized_url = normalize_url(url)
+        url_information = extract_url_information(normalized_url)
+        url_information_object = URLInformationModel.objects.create(url=normalized_url, **url_information)
 
         return Response(self.serializer_class(url_information_object).data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs) -> Response:
         try:
-            url_information_object = self.queryset.get(pk=kwargs[URL])
+            url = normalize_url(kwargs[URL])
+            url_information_object = self.queryset.get(pk=url)
             serializer = self.serializer_class(url_information_object)
             return Response(serializer.data)
         except self.queryset.model.DoesNotExist:
@@ -46,7 +48,8 @@ class URLInformationViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs) -> Response:
         try:
-            url_information_object = self.queryset.get(pk=kwargs[URL])
+            url = normalize_url(kwargs[URL])
+            url_information_object = self.queryset.get(pk=url)
             url_information_object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except self.queryset.model.DoesNotExist:

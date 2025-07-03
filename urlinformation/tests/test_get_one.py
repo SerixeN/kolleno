@@ -12,7 +12,7 @@ TEST_URL = '/api/v1/urls/https%3A%2F%2Ftest.com%2F/'
 
 
 def test_get_one():
-    url = 'https://test.com/'
+    url = 'https://test.com'
     URLInformationModel.objects.create(url=url, domain_name='test.com', protocol='https', stylesheets=0, title='')
     expected = URLInformationSerializer(URLInformationModel.objects.all().get(pk=url)).data
     response = client.get(TEST_URL)

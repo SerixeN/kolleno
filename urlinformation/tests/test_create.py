@@ -2,6 +2,7 @@ import pytest
 from rest_framework.test import APIClient
 from rest_framework import status
 from urlinformation.models import URLInformationModel
+from urlinformation.utils import normalize_url
 from urlinformation.constants import (
     URL_EXIST_MESSAGE,
     URL_IS_NOT_SAFE_MESSAGE,
@@ -31,8 +32,8 @@ def test_create_success(monkeypatch):
     response = client.post(TEST_URL, data={'url': url}, format='json')
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data['url'] == url
-    assert URLInformationModel.objects.filter(url=url).exists()
+    assert response.data['url'] == normalize_url(url)
+    assert URLInformationModel.objects.filter(url=normalize_url(url)).exists()
 
 
 def test_create_missed_url(monkeypatch):
