@@ -25,6 +25,7 @@ services:
       - DATABASE_USER=kolleno_user
       - DATABASE_PASSWORD=kolleno_password
       - DATABASE_PORT=5432
+      - VIRUS_TOTAL_API_KEY=${VIRUS_TOTAL_API_KEY}
     depends_on:
       - db
 
