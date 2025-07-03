@@ -23,4 +23,5 @@ jobs:
 
       - name: Run tests
         run: |
+          export SECRET_KEY=TEST
           pytest

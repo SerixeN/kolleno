@@ -3,10 +3,12 @@ version: "3.9"
 services:
   db:
     image: postgres:15
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: kolleno_user
-      POSTGRES_PASSWORD: kolleno_password
-      POSTGRES_DB: kolleno_db
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -15,15 +17,17 @@ services:
   kolleno:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
       - "80:8000"
     environment:
       - DATABASE_HOST=db
-      - DATABASE_NAME=kolleno_db
-      - DATABASE_USER=kolleno_user
-      - DATABASE_PASSWORD=kolleno_password
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_PORT=5432
       - VIRUS_TOTAL_API_KEY=${VIRUS_TOTAL_API_KEY}
     depends_on:
