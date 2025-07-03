@@ -1,5 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
+from rest_framework import status
 from urlinformation.models import URLInformationModel
 from urlinformation.serializers import URLInformationSerializer
 
@@ -14,4 +15,4 @@ def test_get_list():
     expected = [URLInformationSerializer(item).data for item in URLInformationModel.objects.all()]
     response = client.get('/api/v1/urls/')
     assert response.data == expected
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
