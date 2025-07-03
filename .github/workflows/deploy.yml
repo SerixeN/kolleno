@@ -24,12 +24,11 @@ jobs:
           echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
           echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
-          ls -la
-          cat .env
 
       - name: Copy files to server
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/kolleno
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./.env ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/kolleno
 
       - name: SSH and deploy with docker-compose
         run: |
